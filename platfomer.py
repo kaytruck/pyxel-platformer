@@ -1,4 +1,3 @@
-from math import trunc
 import pyxel
 
 WIDTH: int = 128
@@ -87,6 +86,7 @@ class Player:
             bottom_right_tx, bottom_right_ty
         )
 
+        # 移動
         if top_left_tile >= TILE_BG_NUM or bottom_left_tile >= TILE_BG_NUM:
             # 左側の位置補正
             self.px = (top_left_tx + 1) * TILE_SIZE
@@ -122,6 +122,7 @@ class Player:
             bottom_right_tx, bottom_right_ty
         )
 
+        # 移動
         if top_left_tile >= TILE_BG_NUM or top_right_tile >= TILE_BG_NUM:
             # 上側の位置補正
             self.py = (top_left_ty + 1) * TILE_SIZE
@@ -135,11 +136,6 @@ class Player:
         else:
             # 補正不要時の移動
             self.py += self.acc_y
-
-    # def get_tile_xy(self, x, y):
-    #     tx = int(x / TILE_SIZE)
-    #     ty = int(y / TILE_SIZE)
-    #     return tx, ty
 
     def draw(self):
         img = 0
