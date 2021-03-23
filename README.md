@@ -1,2 +1,2 @@
 # pyxel-platformer
-pyxel platformer made using pyxel
+simple pyxel platformer made using pyxel
