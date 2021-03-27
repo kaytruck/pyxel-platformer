@@ -12,6 +12,11 @@ class Player:
         self.acc_y: float = common.GRAVITY
         self.jump_count: int = 0
 
+        self.anime_idx: int = 0
+        self.anime_idx_max: int = 2
+        self.anime_tick: int = 0
+        self.anime_interval: int = 3
+
     def update(self):
         if pyxel.btn(pyxel.KEY_LEFT):
             self.acc_x = -common.PLYAER_STEP
@@ -112,4 +117,21 @@ class Player:
 
     def draw(self):
         img = 0
-        pyxel.blt(self.px, self.py, img, 0, 0, common.TILE_SIZE, common.TILE_SIZE, 0)
+        if self.acc_x != 0:
+            self.anime_tick = (self.anime_tick + 1) % self.anime_interval
+            if self.anime_tick == 0:
+                self.anime_idx += 1
+                if self.anime_idx >= self.anime_idx_max:
+                    self.anime_idx = 0
+        else:
+            self.anime_idx = 0
+        pyxel.blt(
+            self.px,
+            self.py,
+            img,
+            (0 + self.anime_idx * common.TILE_SIZE),
+            0,
+            common.TILE_SIZE,
+            common.TILE_SIZE,
+            0,
+        )

@@ -11,14 +11,19 @@ ASSETS = "assets/oldempire.pyxres"
 
 class Main:
     def __init__(self) -> None:
-        self.map = Map(TILE_MAP, WIDTH, HEIGHT, common.TILE_SIZE)
-        self.player = Player(4 * common.TILE_SIZE, 4 * common.TILE_SIZE, self.map)
+        self.map: Map = Map(TILE_MAP, WIDTH, HEIGHT, common.TILE_SIZE)
+        init_px = 4
+        init_py = 4
+        self.player: Player = Player(
+            init_px * common.TILE_SIZE, init_py * common.TILE_SIZE, self.map
+        )
 
         pyxel.init(WIDTH, HEIGHT)
         pyxel.load(ASSETS)
         pyxel.run(self.update, self.draw)
 
     def update(self):
+        self.map.update()
         self.player.update()
 
     def draw(self):
