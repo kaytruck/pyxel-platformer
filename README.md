@@ -1,2 +1,2 @@
 # pyxel-platformer
-simple pyxel platformer made using pyxel
+simple platformer game made with pyxel
