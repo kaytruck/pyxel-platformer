@@ -1,6 +1,7 @@
 import pyxel
 import common
 from map import Map
+from common import Direction
 
 
 class Player:
@@ -8,6 +9,8 @@ class Player:
         self.px: int = initial_x
         self.py: int = initial_y
         self.current_map: Map = current_map
+
+        self.direction: Direction = Direction.RIGHT
         self.acc_x: int = 0
         self.acc_y: float = common.GRAVITY
         self.jump_count: int = 0
@@ -19,8 +22,10 @@ class Player:
 
     def update(self):
         if pyxel.btn(pyxel.KEY_LEFT):
+            self.direction = Direction.LEFT
             self.acc_x = -common.PLYAER_STEP
         if pyxel.btn(pyxel.KEY_RIGHT):
+            self.direction = Direction.RIGHT
             self.acc_x = common.PLYAER_STEP
         if pyxel.btnp(pyxel.KEY_Z) or pyxel.btnp(pyxel.KEY_SPACE):
             if self.jump_count < 2:
@@ -129,8 +134,8 @@ class Player:
             self.px,
             self.py,
             img,
-            (0 + self.anime_idx * common.TILE_SIZE),
-            0,
+            (0 + common.TILE_SIZE * self.anime_idx),
+            (0 + common.TILE_SIZE * self.direction.value),
             common.TILE_SIZE,
             common.TILE_SIZE,
             0,
