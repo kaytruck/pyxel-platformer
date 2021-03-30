@@ -12,13 +12,15 @@ class Player:
 
         self.direction: Direction = Direction.RIGHT
         self.acc_x: int = 0
-        self.acc_y: float = common.GRAVITY
+        self.acc_y: int = common.GRAVITY
         self.jump_count: int = 0
 
-        self.anime_idx: int = 0
-        self.anime_idx_max: int = 2
-        self.anime_tick: int = 0
-        self.anime_interval: int = 3
+        self.attack: bool = False
+
+        self.ani_move_idx: int = 0
+        self.ani_move_idx_max: int = 2
+        self.ani_move_tick: int = 0
+        self.ani_move_interval: int = 3
 
     def update(self):
         if pyxel.btn(pyxel.KEY_LEFT):
@@ -32,6 +34,9 @@ class Player:
                 # ダブルジャンプまでは許容する
                 self.acc_y = common.JUMP
                 self.jump_count += 1
+        if pyxel.btnp(pyxel.KEY_X):
+            # 攻撃
+            self.attack = True
         if pyxel.btnr(pyxel.KEY_LEFT) or pyxel.btnr(pyxel.KEY_RIGHT):
             self.acc_x = 0
 
@@ -123,18 +128,18 @@ class Player:
     def draw(self):
         img = 0
         if self.acc_x != 0:
-            self.anime_tick = (self.anime_tick + 1) % self.anime_interval
-            if self.anime_tick == 0:
-                self.anime_idx += 1
-                if self.anime_idx >= self.anime_idx_max:
-                    self.anime_idx = 0
+            self.ani_move_tick = (self.ani_move_tick + 1) % self.ani_move_interval
+            if self.ani_move_tick == 0:
+                self.ani_move_idx += 1
+                if self.ani_move_idx >= self.ani_move_idx_max:
+                    self.ani_move_idx = 0
         else:
-            self.anime_idx = 0
+            self.ani_move_idx = 0
         pyxel.blt(
             self.px,
             self.py,
             img,
-            (0 + common.TILE_SIZE * self.anime_idx),
+            (0 + common.TILE_SIZE * self.ani_move_idx),
             (0 + common.TILE_SIZE * self.direction.value),
             common.TILE_SIZE,
             common.TILE_SIZE,
