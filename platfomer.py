@@ -18,7 +18,7 @@ class Main:
             init_px * common.TILE_SIZE, init_py * common.TILE_SIZE, self.map
         )
 
-        pyxel.init(WIDTH, HEIGHT)
+        pyxel.init(WIDTH, HEIGHT, fps=common.FPS)
         pyxel.load(ASSETS)
         pyxel.run(self.update, self.draw)
 
