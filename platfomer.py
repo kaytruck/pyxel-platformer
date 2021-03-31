@@ -6,7 +6,7 @@ from player import Player
 WIDTH: int = 128
 HEIGHT: int = 128
 TILE_MAP: int = 0
-ASSETS = "assets/oldempire.pyxres"
+ASSETS = "assets/pypla.pyxres"
 
 
 class Main:
