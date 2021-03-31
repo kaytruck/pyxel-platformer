@@ -17,10 +17,15 @@ class Player:
 
         self.attack: bool = False
 
-        self.ani_move_idx: int = 0
+        self.ani_move_idx: int = -1
         self.ani_move_idx_max: int = 2
         self.ani_move_tick: int = 0
         self.ani_move_interval: int = 3
+
+        self.ani_atk_idx: int = -1
+        self.ani_atk_idx_max: int = 4
+        self.ani_atk_tick: int = 0
+        self.ani_atk_interval: int = 1
 
     def update(self):
         if pyxel.btn(pyxel.KEY_LEFT):
@@ -145,3 +150,28 @@ class Player:
             common.TILE_SIZE,
             0,
         )
+        if self.attack:
+            # 攻撃のアニメーション
+            self.ani_atk_tick = (self.ani_atk_tick + 1) % self.ani_atk_interval
+            if self.ani_atk_tick == 0:
+                self.ani_atk_idx += 1
+                if self.ani_atk_idx >= self.ani_atk_idx_max:
+                    self.ani_atk_idx = 0
+                    self.attack = False
+            # プレイヤーの左右向きに応じて攻撃描画位置を変更
+            attack_offset = common.TILE_SIZE
+            attack_dir = 1
+            if self.direction == Direction.LEFT:
+                attack_offset = -common.TILE_SIZE * 2
+                attack_dir = -1
+            # 攻撃の描画
+            pyxel.blt(
+                self.px + attack_offset,
+                self.py,
+                img,
+                0,
+                (32 + common.TILE_SIZE * self.ani_atk_idx),
+                common.TILE_SIZE * 2 * attack_dir,
+                common.TILE_SIZE,
+                0,
+            )
