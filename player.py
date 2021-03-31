@@ -15,7 +15,11 @@ class Player:
         self.acc_y: int = common.GRAVITY
         self.jump_count: int = 0
 
+        self.img: int = 0
+
         self.attack: bool = False
+        self.attack_offset: int = common.TILE_SIZE
+        self.attack_direction: int = 1
 
         self.ani_move_idx: int = -1
         self.ani_move_idx_max: int = 2
@@ -49,6 +53,9 @@ class Player:
         self.move_x()
         # Y軸方向の移動
         self.move_y()
+
+        # 描画の準備
+        self.prepare_draw()
 
     def move_x(self):
         # 左側の壁判定(上端)
@@ -130,8 +137,9 @@ class Player:
             # 補正不要時の移動
             self.py += self.acc_y
 
-    def draw(self):
-        img = 0
+    def prepare_draw(self):
+        # 自機のアニメーション
+        self.img = 0
         if self.acc_x != 0:
             self.ani_move_tick = (self.ani_move_tick + 1) % self.ani_move_interval
             if self.ani_move_tick == 0:
@@ -140,18 +148,9 @@ class Player:
                     self.ani_move_idx = 0
         else:
             self.ani_move_idx = 0
-        pyxel.blt(
-            self.px,
-            self.py,
-            img,
-            (0 + common.TILE_SIZE * self.ani_move_idx),
-            (0 + common.TILE_SIZE * self.direction.value),
-            common.TILE_SIZE,
-            common.TILE_SIZE,
-            0,
-        )
+
+        # 攻撃のアニメーション
         if self.attack:
-            # 攻撃のアニメーション
             self.ani_atk_tick = (self.ani_atk_tick + 1) % self.ani_atk_interval
             if self.ani_atk_tick == 0:
                 self.ani_atk_idx += 1
@@ -159,19 +158,33 @@ class Player:
                     self.ani_atk_idx = 0
                     self.attack = False
             # プレイヤーの左右向きに応じて攻撃描画位置を変更
-            attack_offset = common.TILE_SIZE
-            attack_dir = 1
+            self.attack_offset = common.TILE_SIZE
+            self.attack_direction = 1
             if self.direction == Direction.LEFT:
-                attack_offset = -common.TILE_SIZE * 2
-                attack_dir = -1
+                self.attack_offset = -common.TILE_SIZE * 2
+                self.attack_direction = -1
+
+    def draw(self):
+        # 自機の描画
+        pyxel.blt(
+            self.px,
+            self.py,
+            self.img,
+            (0 + common.TILE_SIZE * self.ani_move_idx),
+            (0 + common.TILE_SIZE * self.direction.value),
+            common.TILE_SIZE,
+            common.TILE_SIZE,
+            0,
+        )
+        if self.attack:
             # 攻撃の描画
             pyxel.blt(
-                self.px + attack_offset,
+                self.px + self.attack_offset,
                 self.py,
-                img,
+                self.img,
                 0,
                 (32 + common.TILE_SIZE * self.ani_atk_idx),
-                common.TILE_SIZE * 2 * attack_dir,
+                common.TILE_SIZE * 2 * self.attack_direction,
                 common.TILE_SIZE,
                 0,
             )
