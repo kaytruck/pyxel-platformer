@@ -14,6 +14,8 @@ class Player:
         self.acc_x: int = 0
         self.acc_y: int = common.GRAVITY
         self.jump_count: int = 0
+        self.gravity_tick: int = 0
+        self.gravity_interval: int = common.GRAVITY_INTERVAL
 
         self.img: int = 0
 
@@ -96,9 +98,11 @@ class Player:
 
     def move_y(self):
         # 重力加速度
-        self.acc_y += common.GRAVITY
-        if self.acc_y > common.GRAVITY_MAX:
-            self.acc_y = common.GRAVITY_MAX
+        self.gravity_tick = (self.gravity_tick + 1) % self.gravity_interval
+        if self.gravity_tick == 0:
+            self.acc_y += common.GRAVITY
+            if self.acc_y > common.GRAVITY_MAX:
+                self.acc_y = common.GRAVITY_MAX
 
         # 上側の壁判定(左端)
         top_left_tx = int(self.px / common.TILE_SIZE)
