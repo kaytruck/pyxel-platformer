@@ -8,6 +8,7 @@ class Player:
     def __init__(self, initial_x, initial_y, current_map) -> None:
         self.px: int = initial_x
         self.py: int = initial_y
+        # TODO PlayerからMapへ直接参照するのはやめたい
         self.current_map: Map = current_map
 
         self.direction: Direction = Direction.RIGHT
@@ -18,6 +19,8 @@ class Player:
         self.gravity_interval: int = common.GRAVITY_INTERVAL
 
         self.img: int = 0
+        self.pu: int = 0
+        self.pv: int = 0
 
         self.attack: bool = False
         self.attack_offset: int = common.TILE_SIZE
@@ -153,6 +156,30 @@ class Player:
         else:
             self.ani_move_idx = 0
 
+        # 自機画像の取得元位置
+        if self.jump_count != 0:
+            # ジャンプ中画像を表示
+            self.pu = 0
+            if self.acc_x > 0:
+                # 右移動ジャンプ
+                self.pv = common.TILE_SIZE * 3
+            elif self.acc_x == 0:
+                # その場でジャンプ
+                if self.direction == Direction.RIGHT:
+                    self.pv = common.TILE_SIZE * 2
+                elif self.direction == Direction.LEFT:
+                    self.pv = common.TILE_SIZE * 5
+            elif self.acc_x < 0:
+                # 左移動ジャンプ
+                self.pv = common.TILE_SIZE * 6
+        # TODO 立ち止まり、上下方向を向く
+        # TODO 斜め上方向
+        # TODO 斜め下方向
+        else:
+            # 左右水平移動の画像を表示
+            self.pu = 0 + common.TILE_SIZE * self.ani_move_idx
+            self.pv = 0 + common.TILE_SIZE * self.direction.value
+
         # 攻撃のアニメーション
         if self.attack:
             self.ani_atk_tick = (self.ani_atk_tick + 1) % self.ani_atk_interval
@@ -174,8 +201,8 @@ class Player:
             self.px,
             self.py,
             self.img,
-            (0 + common.TILE_SIZE * self.ani_move_idx),
-            (0 + common.TILE_SIZE * self.direction.value),
+            self.pu,
+            self.pv,
             common.TILE_SIZE,
             common.TILE_SIZE,
             0,
@@ -186,8 +213,8 @@ class Player:
                 self.px + self.attack_offset,
                 self.py,
                 self.img,
-                0,
-                (32 + common.TILE_SIZE * self.ani_atk_idx),
+                (0 + common.TILE_SIZE * 2),
+                (0 + common.TILE_SIZE * self.ani_atk_idx),
                 common.TILE_SIZE * 2 * self.attack_direction,
                 common.TILE_SIZE,
                 0,
