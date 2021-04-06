@@ -160,25 +160,48 @@ class Player:
         if self.jump_count != 0:
             # ジャンプ中画像を表示
             self.pu = 0
-            if self.acc_x > 0:
-                # 右移動ジャンプ
-                self.pv = common.TILE_SIZE * 3
-            elif self.acc_x == 0:
+            if self.acc_x == 0:
                 # その場でジャンプ
-                if self.direction == Direction.RIGHT:
+                if pyxel.btn(pyxel.KEY_UP):
+                    self.pv = common.TILE_SIZE * 9
+                elif pyxel.btn(pyxel.KEY_DOWN):
+                    self.pv = common.TILE_SIZE * 10
+                else:
                     self.pv = common.TILE_SIZE * 2
-                elif self.direction == Direction.LEFT:
-                    self.pv = common.TILE_SIZE * 5
-            elif self.acc_x < 0:
-                # 左移動ジャンプ
-                self.pv = common.TILE_SIZE * 6
-        # TODO 立ち止まり、上下方向を向く
-        # TODO 斜め上方向
-        # TODO 斜め下方向
+            else:
+                # 移動ジャンプ
+                if pyxel.btn(pyxel.KEY_UP):
+                    # 斜め上向き
+                    self.pv = common.TILE_SIZE * 4
+                elif pyxel.btn(pyxel.KEY_DOWN):
+                    # 斜め下向き
+                    self.pv = common.TILE_SIZE * 6
+                else:
+                    self.pv = common.TILE_SIZE * 3
+        elif self.acc_x == 0:
+            # 立ち止まり、上下方向を向く
+            self.pu = 0
+            if pyxel.btn(pyxel.KEY_UP):
+                # 上方向
+                self.pv = common.TILE_SIZE * 7
+            elif pyxel.btn(pyxel.KEY_DOWN):
+                # 下方向
+                self.pv = common.TILE_SIZE * 8
+            else:
+                # 上下ボタンを離したときは水平方向を向く
+                self.pv = 0
         else:
-            # 左右水平移動の画像を表示
+            # 水平移動画像を表示
             self.pu = 0 + common.TILE_SIZE * self.ani_move_idx
-            self.pv = 0 + common.TILE_SIZE * self.direction.value
+            if pyxel.btn(pyxel.KEY_UP):
+                # 左右水平移動(斜め上向き)の画像を表示
+                self.pv = common.TILE_SIZE * 1
+            elif pyxel.btn(pyxel.KEY_DOWN):
+                # 左右水平移動(斜め下向き)の画像を表示
+                self.pv = common.TILE_SIZE * 5
+            else:
+                # 左右水平移動の画像を表示
+                self.pv = 0
 
         # 攻撃のアニメーション
         if self.attack:
@@ -197,13 +220,14 @@ class Player:
 
     def draw(self):
         # 自機の描画
+        d = 1 if self.direction == Direction.RIGHT else -1
         pyxel.blt(
             self.px,
             self.py,
             self.img,
             self.pu,
             self.pv,
-            common.TILE_SIZE,
+            common.TILE_SIZE * d,
             common.TILE_SIZE,
             0,
         )
