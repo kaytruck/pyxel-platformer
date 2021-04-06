@@ -163,45 +163,37 @@ class Player:
             if self.acc_x == 0:
                 # その場でジャンプ
                 if pyxel.btn(pyxel.KEY_UP):
-                    self.pv = common.TILE_SIZE * 9
+                    self.pv = common.P_IMGV_JUMP_UP
                 elif pyxel.btn(pyxel.KEY_DOWN):
-                    self.pv = common.TILE_SIZE * 10
+                    self.pv = common.P_IMGV_JUMP_DOWN
                 else:
-                    self.pv = common.TILE_SIZE * 2
+                    self.pv = common.P_IMGV_STOP_JUMP_RIGHT
             else:
                 # 移動ジャンプ
                 if pyxel.btn(pyxel.KEY_UP):
-                    # 斜め上向き
-                    self.pv = common.TILE_SIZE * 4
+                    self.pv = common.P_IMGV_JUMP_UP_RIGHT
                 elif pyxel.btn(pyxel.KEY_DOWN):
-                    # 斜め下向き
-                    self.pv = common.TILE_SIZE * 6
+                    self.pv = common.P_IMGV_JUMP_DOWN_RIGHT
                 else:
-                    self.pv = common.TILE_SIZE * 3
+                    self.pv = common.P_IMGV_JUMP_RIGHT
         elif self.acc_x == 0:
             # 立ち止まり、上下方向を向く
             self.pu = 0
             if pyxel.btn(pyxel.KEY_UP):
-                # 上方向
-                self.pv = common.TILE_SIZE * 7
+                self.pv = common.P_IMGV_STOP_UP
             elif pyxel.btn(pyxel.KEY_DOWN):
-                # 下方向
-                self.pv = common.TILE_SIZE * 8
+                self.pv = common.P_IMGV_STOP_DOWN
             else:
-                # 上下ボタンを離したときは水平方向を向く
-                self.pv = 0
+                self.pv = common.P_IMGV_RIGHT
         else:
             # 水平移動画像を表示
             self.pu = 0 + common.TILE_SIZE * self.ani_move_idx
             if pyxel.btn(pyxel.KEY_UP):
-                # 左右水平移動(斜め上向き)の画像を表示
-                self.pv = common.TILE_SIZE * 1
+                self.pv = common.P_IMGV_UP_RIGHT
             elif pyxel.btn(pyxel.KEY_DOWN):
-                # 左右水平移動(斜め下向き)の画像を表示
-                self.pv = common.TILE_SIZE * 5
+                self.pv = common.P_IMGV_DOWN_RIGHT
             else:
-                # 左右水平移動の画像を表示
-                self.pv = 0
+                self.pv = common.P_IMGV_RIGHT
 
         # 攻撃のアニメーション
         if self.attack:
