@@ -26,6 +26,14 @@ class Player:
         self.attack_offset: int = common.TILE_SIZE
         self.attack_direction: int = 1
 
+        self.attack_x: int = 0
+        self.attack_y: int = 0
+        self.attack_img: int = self.img
+        self.attack_u: int = 0
+        self.attack_v: int = 0
+        self.attack_w: int = 0
+        self.attack_h: int = 0
+
         self.ani_move_idx: int = -1
         self.ani_move_idx_max: int = 2
         self.ani_move_tick: int = 0
@@ -203,12 +211,17 @@ class Player:
                 if self.ani_atk_idx >= self.ani_atk_idx_max:
                     self.ani_atk_idx = 0
                     self.attack = False
-            # プレイヤーの左右向きに応じて攻撃描画位置を変更
-            self.attack_offset = common.TILE_SIZE
-            self.attack_direction = 1
-            if self.direction == Direction.LEFT:
-                self.attack_offset = -common.TILE_SIZE * 2
-                self.attack_direction = -1
+            # プレイヤーの向きに応じて攻撃描画位置を変更
+            if pyxel.btn(pyxel.KEY_UP):
+                # TODO
+                pass
+            else:
+                # 左右方向
+                self.attack_offset = common.TILE_SIZE
+                self.attack_direction = 1
+                if self.direction == Direction.LEFT:
+                    self.attack_offset = -common.TILE_SIZE * 2
+                    self.attack_direction = -1
 
     def draw(self):
         # 自機の描画
