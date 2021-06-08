@@ -14,6 +14,7 @@ class Player:
         self.direction: Direction = Direction.RIGHT
         self.acc_x: int = 0
         self.acc_y: int = common.GRAVITY
+        self.v_x: int = 0
         self.jump_count: int = 0
         self.gravity_tick: int = 0
         self.gravity_interval: int = common.GRAVITY_INTERVAL
